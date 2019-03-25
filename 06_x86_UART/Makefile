@@ -1,4 +1,4 @@
-obj-m:=x86_uart.o
+obj-m:=blink_led.o
 
 KERNELDIR=/lib/modules/$(shell uname -r)/build 
 
