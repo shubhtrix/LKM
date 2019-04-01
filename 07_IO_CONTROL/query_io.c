@@ -102,14 +102,14 @@ static int __init IN(void) {
 
 	if(IS_ERR(cl = class_create(THIS_MODULE, "char"))) {
         cdev_del(&c_dev);
-		unregister_chrdev_region(dev, 2);
+	    unregister_chrdev_region(dev, MINOR_CNT);
 		return PTR_ERR(cl);
 	}
 	
 	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "query"))) {
 		class_destroy(cl);
         cdev_del(&c_dev);
-		unregister_chrdev_region(dev, 2);
+	    unregister_chrdev_region(dev, MINOR_CNT);
 		return PTR_ERR(dev_ret);
 	}
 

@@ -8,7 +8,7 @@
 
 #include "query_io.h"
 
-void get_vars(file *fd) {
+void get_vars(int fd) {
 
     query_arg_t q;
 
@@ -21,14 +21,14 @@ void get_vars(file *fd) {
     }
 }
 
-void clr_vars(file *fd) {
+void clr_vars(int fd) {
 
     if (ioctl(fd, QUERY_CLR_VARIABLES) == -1) {
         perror("query_app ioctl clr");
     }
 }
 
-void set_vars(file *fd) {
+void set_vars(int fd) {
 
     int v;
     query_arg_t q;
@@ -50,7 +50,7 @@ void set_vars(file *fd) {
         perror("query_app ioctl get");
     }
 }
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char *file="/dev/query";
     int fd;
@@ -68,7 +68,7 @@ void main(int argc, char *argv[])
             option = e_get;
         } else if (strcmp(argv[1],"-c") == 0) {
             option = e_clr;
-        } else if (strcmp(argv[1],"-c") == 0) {
+        } else if (strcmp(argv[1],"-s") == 0) {
             option = e_set;
         } else {
             fprintf(stderr, "Usage: %s [-g | -c | -s]\n", argv[0]);
@@ -79,13 +79,13 @@ void main(int argc, char *argv[])
         return 1;
     }
 
-    fd = fopen(file, O_RDWR);
+    fd = open(file, O_RDWR);
     if (fd == -1) {
         perror ("query_app open");
         return 2;
     }
 
-    switch (options) {
+    switch (option) {
     
         case e_get:
             get_vars(fd);
