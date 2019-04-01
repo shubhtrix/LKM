@@ -52,7 +52,7 @@ void set_vars(int fd) {
 }
 int main(int argc, char *argv[])
 {
-    char *file="/dev/query";
+    char *file="/dev/query_io";
     int fd;
 
     enum {

@@ -14,7 +14,7 @@
 #include "query_io.h"
 
 #define FIRST_MINOR 0
-#define MINOR_CNT 0
+#define MINOR_CNT 2
 
 static dev_t dev;		    //One vaiable containing Majaor & Minor Nos.
 static struct cdev c_dev;	//Global variable for character device structure 
@@ -48,13 +48,9 @@ static long my_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
             }
             break;
         case QUERY_CLR_VARIABLES:
-            q.status = 0;
-            q.dignity = 0;
-            q.ego = 0;
-            if (copy_to_user((query_arg_t *)arg, &q, sizeof(query_arg_t)))
-            {
-                return -EACCES;
-            }
+            status = 0;
+            dignity = 0;
+            ego = 0;
             break;
         case QUERY_SET_VARIABLES:
             if (copy_from_user(&q, (query_arg_t *)arg, sizeof(query_arg_t)))
@@ -106,7 +102,7 @@ static int __init IN(void) {
 		return PTR_ERR(cl);
 	}
 	
-	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "query"))) {
+	if (IS_ERR(dev_ret = device_create(cl, NULL, dev, NULL, "query_io"))) {
 		class_destroy(cl);
         cdev_del(&c_dev);
 	    unregister_chrdev_region(dev, MINOR_CNT);
@@ -118,9 +114,9 @@ static int __init IN(void) {
 
 static void __exit OUT(void) {
 
+    cdev_del(&c_dev);
 	device_destroy(cl, dev);
 	class_destroy(cl);
-    cdev_del(&c_dev);
 	unregister_chrdev_region(dev, MINOR_CNT);
 	printk(KERN_INFO "Exiting FROM TEST MODULE!!!");
 }

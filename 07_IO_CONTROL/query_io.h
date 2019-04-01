@@ -8,6 +8,7 @@ typedef struct {
 
 #define QUERY_GET_VARIABLES _IOR('q',1, query_arg_t *)
 #define QUERY_CLR_VARIABLES _IO('q',2)
+//#define QUERY_CLR_VARIABLES _IO('q',2)
 #define QUERY_SET_VARIABLES _IOW('q',1, query_arg_t *)
 
 #endif
